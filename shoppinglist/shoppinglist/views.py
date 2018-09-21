@@ -25,6 +25,13 @@ class listAllShoppingListsDetailsView(generics.RetrieveUpdateDestroyAPIView):
 	permission_classes = (
 		permissions.IsAuthenticated, IsOwner)
 
+	def get(self,request,pk=None, **kwargs):
+		shoppinglist = Shoppinglist.objects.get(id=pk)
+		items = ShoppinglistItem.objects.get(shoppinglist_id=shoppinglist.id)
+		return Response(
+			data= ItemSerializer(items).data,
+			status=status.HTTP_200_OK)
+
 	def post(self,request, **kwargs):
 		List = Shoppinglist.objects.create(
 			listName=request.data["listName"],
@@ -77,6 +84,10 @@ class listShoppinglistItemsDetailsView(generics.RetrieveUpdateDestroyAPIView):
 		newitem.shoppinglist = Shoppinglist.objects.get(id=request.data["shoppinglist"])
 		newitem.quantity = request.data["quantity"]
 		newitem.price = request.data["price"]
+		if request.data["bought"] == "" or request.data["bought"] == null:
+			pass
+		else:
+			newitem.bought = request.data["bought"]
 		newitem.save()
 		return Response(
 			data= ItemSerializer(newitem).data,
