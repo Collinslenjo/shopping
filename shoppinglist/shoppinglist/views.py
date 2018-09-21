@@ -12,8 +12,8 @@ from .permissions import IsOwner
 class listAllShoppingListsView(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Shoppinglist.objects.all()
 	serializer_class = ShoppinglistSerializer
-	# permission_classes = (
-	# 	permissions.IsAuthenticated, IsOwner)
+	permission_classes = (
+		permissions.IsAuthenticated, IsOwner)
 
 	def post(self,request, **kwargs):
 		List = Shoppinglist.objects.create(
@@ -36,8 +36,8 @@ class listAllShoppingListsView(generics.RetrieveUpdateDestroyAPIView):
 class listShoppinglistItemsView(generics.RetrieveUpdateDestroyAPIView):
 	queryset = ShoppinglistItem.objects.all()
 	serializer_class = ItemSerializer
-	# permission_classes = (
-	# 	permissions.IsAuthenticated, IsOwner)
+	permission_classes = (
+		permissions.IsAuthenticated, IsOwner)
 
 	def post(self,request, **kwargs):
 		Item = ShoppinglistItem.objects.create(
