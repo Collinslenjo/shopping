@@ -9,11 +9,21 @@ from .permissions import IsOwner
 
 # Create your views here.
 # ShoppingList View
-class listAllShoppingListsView(generics.RetrieveUpdateDestroyAPIView):
+class listAllShoppingListsView(generics.ListCreateAPIView):
 	queryset = Shoppinglist.objects.all()
 	serializer_class = ShoppinglistSerializer
-	# permission_classes = (
-	# 	permissions.IsAuthenticated, IsOwner)
+	permission_classes = (
+		permissions.IsAuthenticated, IsOwner)
+
+	def perform_create(self, serializer):
+		serializer.save(user=self.request.user)
+
+class listAllShoppingListsDetailsView(generics.RetrieveUpdateDestroyAPIView):
+	lookup_field = 'pk'
+	queryset = Shoppinglist.objects.all()
+	serializer_class = ShoppinglistSerializer
+	permission_classes = (
+		permissions.IsAuthenticated, IsOwner)
 
 	def post(self,request, **kwargs):
 		List = Shoppinglist.objects.create(
@@ -25,19 +35,30 @@ class listAllShoppingListsView(generics.RetrieveUpdateDestroyAPIView):
 			status=status.HTTP_201_CREATED
 			)
 
-	def update(self, request, pk=None):
-		return Response("ok")
-
-
-	def perform_create(self, serializer):
-		serializer.save(user=self.request.user)
+	def update(self, request, pk=None,**kwargs):
+		newlist = Shoppinglist.objects.get(id=pk)
+		newlist.listName=request.data["listName"]
+		newlist.user = User.objects.get(id=request.data["user"])
+		newlist.budgetAmount = request.data["budgetAmount"]
+		newlist.save()
+		return Response(
+			data= ShoppinglistSerializer(newlist).data,
+			status=status.HTTP_200_OK)
 
 # ShoppingList Items View
-class listShoppinglistItemsView(generics.RetrieveUpdateDestroyAPIView):
+class listShoppinglistItemsView(generics.ListCreateAPIView):
 	queryset = ShoppinglistItem.objects.all()
 	serializer_class = ItemSerializer
-	# permission_classes = (
-	# 	permissions.IsAuthenticated, IsOwner)
+	permission_classes = (
+		permissions.IsAuthenticated, IsOwner)
+
+
+class listShoppinglistItemsDetailsView(generics.RetrieveUpdateDestroyAPIView):
+	lookup_field = 'pk'
+	queryset = ShoppinglistItem.objects.all()
+	serializer_class = ItemSerializer
+	permission_classes = (
+		permissions.IsAuthenticated, IsOwner)
 
 	def post(self,request, **kwargs):
 		Item = ShoppinglistItem.objects.create(
@@ -49,3 +70,14 @@ class listShoppinglistItemsView(generics.RetrieveUpdateDestroyAPIView):
 			data= ItemSerializer(Item).data,
 			status=status.HTTP_201_CREATED
 			)
+
+	def update(self, request, pk=None,**kwargs):
+		newitem = ShoppinglistItem.objects.get(id=pk)
+		newitem.itemName=request.data["itemName"]
+		newitem.shoppinglist = Shoppinglist.objects.get(id=request.data["shoppinglist"])
+		newitem.quantity = request.data["quantity"]
+		newitem.price = request.data["price"]
+		newitem.save()
+		return Response(
+			data= ItemSerializer(newitem).data,
+			status=status.HTTP_200_OK)
