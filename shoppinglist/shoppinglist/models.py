@@ -14,7 +14,7 @@ class Shoppinglist(models.Model):
 	updatedAt = models.DateTimeField(auto_now=True)
 
 	def __str__(self):
-		return "{} - {}".format(self.name,self.userId,self.budgetAmount)
+		return "{} - {}".format(self.listName,self.user,self.budgetAmount)
 
 	class Meta:
 		db_table = 'tbl_shoppinglists'
@@ -33,7 +33,7 @@ class ShoppinglistItem(models.Model):
 	updatedAt = models.DateTimeField(auto_now=True)
 
 	def __str__(self):
-		return "{} - {}".format(self.name,self.quantity,self.price,self.shoppinglistId)
+		return "{} - {}".format(self.itemName,self.quantity,self.price,self.shoppinglistId)
 
 	class Meta:
 		db_table = 'tbl_shoppinglist_items'

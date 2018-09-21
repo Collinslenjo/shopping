@@ -9,11 +9,11 @@ from .permissions import IsOwner
 
 # Create your views here.
 # ShoppingList View
-class listAllShoppingListsView(generics.ListAPIView):
+class listAllShoppingListsView(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Shoppinglist.objects.all()
 	serializer_class = ShoppinglistSerializer
-	permission_classes = (
-		permissions.IsAuthenticated, IsOwner)
+	# permission_classes = (
+	# 	permissions.IsAuthenticated, IsOwner)
 
 	def post(self,request, **kwargs):
 		List = Shoppinglist.objects.create(
@@ -25,16 +25,19 @@ class listAllShoppingListsView(generics.ListAPIView):
 			status=status.HTTP_201_CREATED
 			)
 
+	def update(self, request, pk=None):
+		return Response("ok")
+
 
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user)
 
 # ShoppingList Items View
-class listShoppinglistItemsView(generics.ListAPIView):
+class listShoppinglistItemsView(generics.RetrieveUpdateDestroyAPIView):
 	queryset = ShoppinglistItem.objects.all()
 	serializer_class = ItemSerializer
-	permission_classes = (
-		permissions.IsAuthenticated, IsOwner)
+	# permission_classes = (
+	# 	permissions.IsAuthenticated, IsOwner)
 
 	def post(self,request, **kwargs):
 		Item = ShoppinglistItem.objects.create(

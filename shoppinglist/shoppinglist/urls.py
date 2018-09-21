@@ -6,8 +6,10 @@ from django.urls import path
 
 
 urlpatterns = [
-    path('lists/', listAllShoppingListsView.as_view(), name="allShoppingLists"),
-    url(r'^items/$', listShoppinglistItemsView.as_view(), name="items"),
+    path(r'lists/', listAllShoppingListsView.as_view(), name="allShoppingLists"),
+    url(r'lists/(?P<pk>\d+)/$', listAllShoppingListsView.as_view()),
+    path('items/', listShoppinglistItemsView.as_view(), name="items"),
+    url(r'items/(?P<pk>\d+)/$', listShoppinglistItemsView.as_view()),
     url(r'^get-token/', obtain_auth_token)
 ]
-urlpatterns = format_suffix_patterns(urlpatterns)
+# urlpatterns = format_suffix_patterns(urlpatterns)
