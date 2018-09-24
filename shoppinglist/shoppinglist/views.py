@@ -1,4 +1,5 @@
 from .serializers import ShoppinglistSerializer,ItemSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Shoppinglist,ShoppinglistItem
 from rest_framework import generics, permissions
 from rest_framework.response import Response
@@ -56,6 +57,8 @@ class listAllShoppingListsDetailsView(generics.RetrieveUpdateDestroyAPIView):
 class listShoppinglistItemsView(generics.ListCreateAPIView):
 	queryset = ShoppinglistItem.objects.all()
 	serializer_class = ItemSerializer
+	filter_backends = (DjangoFilterBackend,)
+	filter_fields = ('itemName', 'price')
 	permission_classes = (
 		permissions.IsAuthenticated, IsOwner)
 
@@ -64,6 +67,8 @@ class listShoppinglistItemsDetailsView(generics.RetrieveUpdateDestroyAPIView):
 	lookup_field = 'pk'
 	queryset = ShoppinglistItem.objects.all()
 	serializer_class = ItemSerializer
+	filter_backends = (DjangoFilterBackend,)
+	filter_fields = ('itemName', 'price')
 	permission_classes = (
 		permissions.IsAuthenticated, IsOwner)
 
