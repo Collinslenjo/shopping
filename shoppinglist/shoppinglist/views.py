@@ -39,7 +39,8 @@ class listAllShoppingListsDetailsView(generics.RetrieveUpdateDestroyAPIView):
 		List = Shoppinglist.objects.create(
 			listName=request.data["listName"],
 			user = User.objects.get(id=request.data["user"]),
-			budgetAmount = request.data["budgetAmount"])
+			budgetAmount = request.data["budgetAmount"],
+			budgetLimit = request.data["budgetLimit"])
 		return Response(
 			data= ShoppinglistSerializer(List).data,
 			status=status.HTTP_201_CREATED
@@ -50,6 +51,7 @@ class listAllShoppingListsDetailsView(generics.RetrieveUpdateDestroyAPIView):
 		newlist.listName=request.data["listName"]
 		newlist.user = User.objects.get(id=request.data["user"])
 		newlist.budgetAmount = request.data["budgetAmount"]
+		newlist.budgetLimit = request.data["budgetLimit"]
 		newlist.save()
 		return Response(
 			data= ShoppinglistSerializer(newlist).data,
@@ -61,8 +63,8 @@ class listShoppinglistItemsView(generics.ListCreateAPIView):
 	serializer_class = ItemSerializer
 	filter_backends = (DjangoFilterBackend,)
 	filter_fields = ('itemName', 'price')
-	# permission_classes = (
-	# 	permissions.IsAuthenticated, IsOwner)
+	permission_classes = (
+		permissions.IsAuthenticated, IsOwner)
 
 
 class listShoppinglistItemsDetailsView(generics.RetrieveUpdateDestroyAPIView):
@@ -71,8 +73,8 @@ class listShoppinglistItemsDetailsView(generics.RetrieveUpdateDestroyAPIView):
 	serializer_class = ItemSerializer
 	filter_backends = (DjangoFilterBackend,)
 	filter_fields = ('itemName', 'price')
-	# permission_classes = (
-	# 	permissions.IsAuthenticated, IsOwner)
+	permission_classes = (
+		permissions.IsAuthenticated, IsOwner)
 
 	def post(self,request, **kwargs):
 		Item = ShoppinglistItem.objects.create(
