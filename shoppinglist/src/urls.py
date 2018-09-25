@@ -20,5 +20,5 @@ from django.urls import path, include, re_path
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
-    re_path('api/(?P<version>(v1|v2))/', include('shoppinglist.urls'))
+    re_path('api/(?P<version>(v1|v2|v3|v4))/', include('shoppinglist.urls'))
 ]
