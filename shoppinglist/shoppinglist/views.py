@@ -13,6 +13,8 @@ from .permissions import IsOwner
 class listAllShoppingListsView(generics.ListCreateAPIView):
 	queryset = Shoppinglist.objects.all()
 	serializer_class = ShoppinglistSerializer
+	filter_backends = (DjangoFilterBackend,)
+	filter_fields = ('listName')
 	permission_classes = (
 		permissions.IsAuthenticated, IsOwner)
 
@@ -59,8 +61,8 @@ class listShoppinglistItemsView(generics.ListCreateAPIView):
 	serializer_class = ItemSerializer
 	filter_backends = (DjangoFilterBackend,)
 	filter_fields = ('itemName', 'price')
-	permission_classes = (
-		permissions.IsAuthenticated, IsOwner)
+	# permission_classes = (
+	# 	permissions.IsAuthenticated, IsOwner)
 
 
 class listShoppinglistItemsDetailsView(generics.RetrieveUpdateDestroyAPIView):
@@ -69,8 +71,8 @@ class listShoppinglistItemsDetailsView(generics.RetrieveUpdateDestroyAPIView):
 	serializer_class = ItemSerializer
 	filter_backends = (DjangoFilterBackend,)
 	filter_fields = ('itemName', 'price')
-	permission_classes = (
-		permissions.IsAuthenticated, IsOwner)
+	# permission_classes = (
+	# 	permissions.IsAuthenticated, IsOwner)
 
 	def post(self,request, **kwargs):
 		Item = ShoppinglistItem.objects.create(
@@ -89,7 +91,7 @@ class listShoppinglistItemsDetailsView(generics.RetrieveUpdateDestroyAPIView):
 		newitem.shoppinglist = Shoppinglist.objects.get(id=request.data["shoppinglist"])
 		newitem.quantity = request.data["quantity"]
 		newitem.price = request.data["price"]
-		if request.data["bought"] == "" or request.data["bought"] == null:
+		if request.data["bought"] == "" or request.data["bought"] == None:
 			pass
 		else:
 			newitem.bought = request.data["bought"]
