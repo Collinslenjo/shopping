@@ -15,8 +15,8 @@ class listAllShoppingListsView(generics.ListCreateAPIView):
 	serializer_class = ShoppinglistSerializer
 	filter_backends = (DjangoFilterBackend,)
 	filter_fields = ('listName')
-	# permission_classes = (
-	# 	permissions.IsAuthenticated, IsOwner)
+	permission_classes = (
+		permissions.IsAuthenticated, IsOwner)
 
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user)
@@ -25,8 +25,8 @@ class listAllShoppingListsDetailsView(generics.RetrieveUpdateDestroyAPIView):
 	lookup_field = 'pk'
 	queryset = Shoppinglist.objects.all()
 	serializer_class = ShoppinglistSerializer
-	# permission_classes = (
-	# 	permissions.IsAuthenticated, IsOwner)
+	permission_classes = (
+		permissions.IsAuthenticated, IsOwner)
 
 	def get(self,request,pk=None, **kwargs):
 		shoppinglist = Shoppinglist.objects.get(id=pk)
