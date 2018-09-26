@@ -28,7 +28,7 @@ auth/reset-password | False | Reset a user password
 #### Endpoints to create, update, view and delete a shopping list & it's items
 |End point | Public Access|Action
 |----------|--------------|------
-api/<v1|v2|v3|v4>/lists/ | False | Create and Retrieve shopping lists
-api/<v1|v2|v3|v4>/lists/<int:list_id> | False | View a shopping list and all it's items also Update & Delete Shopping list
-api/<v1|v2|v3|v4>/items/ | False | View all shopping list items
-api/<v1|v2|v3|v4>/items/<int:item_id>/ | False | Retrieve Update and Delete a shopping list item
+api/<v(1,2,3,4)>/lists/ | False | Create and Retrieve shopping lists
+api/<v(1,2,3,4)>/lists/<int:list_id> | False | View a shopping list and all it's items also Update & Delete Shopping list
+api/<v(1,2,3,4)>/items/ | False | View all shopping list items
+api/<v(1,2,3,4)>/items/<int:item_id>/ | False | Retrieve Update and Delete a shopping list item
