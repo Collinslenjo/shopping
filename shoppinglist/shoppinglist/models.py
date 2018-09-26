@@ -10,12 +10,12 @@ class Shoppinglist(models.Model):
 	listName = models.CharField(max_length=255, null=False)
 	user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='shopping_lists')
 	budgetAmount = models.DecimalField(_('budget_amount(KES)'),max_digits=7, decimal_places=2, default=0.00)
-	budgetLimit = models.DecimalField(_('budget_balance(KES)'),max_digits=7, decimal_places=2, default=0.00)
+	budgetLimit = models.DecimalField(_('budget_limit(KES)'),max_digits=7, decimal_places=2, default=0.00)
 	createdAt = models.DateTimeField(auto_now_add=True)
 	updatedAt = models.DateTimeField(auto_now=True)
 
 	def __str__(self):
-		return "{} - {}".format(self.listName,self.user,self.budgetAmount,self.budgetBalance)
+		return "{} - {}".format(self.listName,self.user,self.budgetAmount,self.budgetLimit)
 
 	class Meta:
 		db_table = 'tbl_shoppinglists'

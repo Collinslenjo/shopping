@@ -15,8 +15,8 @@ class listAllShoppingListsView(generics.ListCreateAPIView):
 	serializer_class = ShoppinglistSerializer
 	filter_backends = (DjangoFilterBackend,)
 	filter_fields = ('listName')
-	permission_classes = (
-		permissions.IsAuthenticated, IsOwner)
+	# permission_classes = (
+	# 	permissions.IsAuthenticated, IsOwner)
 
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user)
@@ -25,14 +25,35 @@ class listAllShoppingListsDetailsView(generics.RetrieveUpdateDestroyAPIView):
 	lookup_field = 'pk'
 	queryset = Shoppinglist.objects.all()
 	serializer_class = ShoppinglistSerializer
-	permission_classes = (
-		permissions.IsAuthenticated, IsOwner)
+	# permission_classes = (
+	# 	permissions.IsAuthenticated, IsOwner)
 
 	def get(self,request,pk=None, **kwargs):
 		shoppinglist = Shoppinglist.objects.get(id=pk)
-		items = ShoppinglistItem.objects.get(shoppinglist_id=shoppinglist.id)
+		bought = ShoppinglistItem.objects.all()
+		bought = bought.filter(bought=True,shoppinglist_id=shoppinglist.id)
+		itemfilter = ShoppinglistItem.objects.all()
+		itemfilter = itemfilter.filter(shoppinglist_id=shoppinglist.id)
+		boughtItems = list()
+		allItemsPrice = list()
+		mydata = list()
+		for item in itemfilter:
+			mydata.append(ItemSerializer(item).data)
+			allItemsPrice.append(item.price)
+		for boughtprice in bought:
+			boughtItems.append(boughtprice.price)
+		jsonData = ShoppinglistSerializer(shoppinglist).data
+		finaldata =mydata
+		if sum(boughtItems) > shoppinglist.budgetLimit and shoppinglist.budgetLimit != 0:
+			jsonData["warning"] = "Your money is running out. you need to refill soon if you intend to be able to continue shopping"
+
+		if sum(boughtItems) >= shoppinglist.budgetAmount and shoppinglist.budgetAmount != 0:
+			remainingAmount = sum(allItemsPrice) - sum(boughtItems)
+			jsonData["RefillWarning"] = "you need to refill KES " + str(remainingAmount) + " to the budget to be able to buy all the remaining items"
+
+		jsonData["items"] = finaldata
 		return Response(
-			data= ItemSerializer(items).data,
+			data= jsonData,
 			status=status.HTTP_200_OK)
 
 	def post(self,request, **kwargs):
