@@ -20,7 +20,6 @@ To run this application, clone the repository on your local machine and run the 
 #### Endpoints of a user authentication and signup
 |End point | Public Access|Action
 |----------|--------------|------
-auth/signup | True | Create an account
 auth/login | True | Login a user
 auth/logout | False | Logout a user
 auth/reset-password | False | Reset a user password
